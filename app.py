@@ -30,12 +30,82 @@ st.set_page_config(
 
 )
 
+st.markdown(
+    """
+    <style>
+
+    /* Main background */
+    .stApp {
+        background: linear-gradient(
+            135deg,
+            #121212,
+            #1DB954
+        );
+        color: white;
+    }
+
+    /* Title */
+    h1 {
+        color: white;
+        text-align: center;
+        font-size: 45px;
+    }
+
+    /* Subheaders */
+    h2, h3 {
+        color: #F5F5F5;
+    }
+
+    /* Buttons */
+    .stButton>button {
+        background-color: #1DB954;
+        color: white;
+        border-radius: 12px;
+        height: 50px;
+        width: 100%;
+        font-size: 18px;
+        border: none;
+    }
+
+    .stButton>button:hover {
+        background-color: #17a74a;
+        color: white;
+    }
+
+    /* Input boxes */
+    .stNumberInput, .stSelectbox, .stSlider {
+        background-color: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        padding: 5px;
+    }
+
+    /* Prediction cards */
+    .prediction-box {
+        background-color: rgba(255,255,255,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 20px;
+        text-align: center;
+        font-size: 24px;
+    }
+
+    </style>
+    """,
+
+    unsafe_allow_html=True
+)
+
 
 # ============================================
 # TITLE
 # ============================================
 
 st.title("🎧 Spotify Song Popularity Predictor")
+
+st.image(
+    "https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg",
+    width=100
+)
 
 st.write(
     "Predict Spotify song popularity using AI."
@@ -89,37 +159,37 @@ explicit = st.selectbox(
 
 if st.button("Predict Popularity"):
 
-    input_data = pd.DataFrame([[
+    # ============================================
+    # CREATE INPUT DATAFRAME
+    # ============================================
 
-        artist_popularity,
-        artist_followers,
-        track_duration_ms,
-        album_total_tracks,
-        track_number,
-        explicit
+    input_data = pd.DataFrame({
 
-    ]], columns=[
+    'artist_popularity': [artist_popularity],
 
-        'artist_popularity',
-        'artist_followers',
-        'track_duration_ms',
-        'album_total_tracks',
-        'track_number',
-        'explicit'
+    'artist_followers': [artist_followers],
 
-    ])
+    'album_total_tracks': [album_total_tracks],
+
+    'track_number': [track_number],
+
+    'track_duration_ms': [track_duration_ms],
+
+    'explicit': [explicit]
+
+    })
 
 
     # SCALE FEATURES
     scaled_columns = [
 
-        'artist_popularity',
-        'artist_followers',
-        'track_duration_ms',
-        'album_total_tracks',
-        'track_number'
+    'artist_popularity',
+    'artist_followers',
+    'album_total_tracks',
+    'track_number',
+    'track_duration_ms'
 
-    ]
+]
 
     input_data[scaled_columns] = scaler.transform(
         input_data[scaled_columns]
@@ -144,10 +214,27 @@ if st.button("Predict Popularity"):
 
     st.success("Prediction Completed ✅")
 
-    st.subheader("🎵 Predicted Popularity Score")
+    st.markdown(f"""
 
-    st.write(round(popularity_score, 2))
+    <div class="prediction-box">
 
-    st.subheader("🔥 Popularity Category")
+    <h2>🎵 Predicted Popularity Score</h2>
 
-    st.write(popularity_category)
+    <h1>{round(popularity_score, 2)}</h1>
+
+    </div>
+
+    """, unsafe_allow_html=True)
+
+
+    st.markdown(f"""
+
+    <div class="prediction-box">
+
+    <h2>🔥 Popularity Category</h2>
+
+    <h1>{popularity_category}</h1>
+
+    </div>
+
+    """, unsafe_allow_html=True)
