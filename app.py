@@ -158,29 +158,26 @@ explicit = st.selectbox(
 # ============================================
 
 if st.button("Predict Popularity"):
-
     # ============================================
-    # CREATE INPUT DATAFRAME
+    # CREATE INPUT DATA
     # ============================================
 
     input_data = pd.DataFrame({
 
-    'artist_popularity': [artist_popularity],
-
-    'artist_followers': [artist_followers],
-
-    'album_total_tracks': [album_total_tracks],
-
-    'track_number': [track_number],
-
-    'track_duration_ms': [track_duration_ms],
-
-    'explicit': [explicit]
+        'artist_popularity': [artist_popularity],
+        'artist_followers': [artist_followers],
+        'track_duration_ms': [track_duration_ms],
+        'album_total_tracks': [album_total_tracks],
+        'track_number': [track_number],
+        'explicit': [explicit]
 
     })
 
 
+    # ============================================
     # SCALE FEATURES
+    # ============================================
+
     scaled_columns = [
 
         'artist_popularity',
@@ -196,17 +193,31 @@ if st.button("Predict Popularity"):
     )
 
 
-    # REGRESSION PREDICTION
+    # ============================================
+    # REORDER COLUMNS FOR MODELS
+    # ============================================
+
+    input_data = input_data[[
+        'artist_popularity',
+        'artist_followers',
+        'album_total_tracks',
+        'track_number',
+        'track_duration_ms',
+        'explicit'
+    ]]
+
+
+    # ============================================
+    # PREDICTIONS
+    # ============================================
+
     popularity_score = regression_model.predict(
         input_data
     )[0]
 
-
-    # CLASSIFICATION PREDICTION
     popularity_category = classification_model.predict(
         input_data
-    )[0]
-
+)[0]
 
     # ============================================
     # OUTPUTS
