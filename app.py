@@ -183,13 +183,13 @@ if st.button("Predict Popularity"):
     # SCALE FEATURES
     scaled_columns = [
 
-    'artist_popularity',
-    'artist_followers',
-    'album_total_tracks',
-    'track_number',
-    'track_duration_ms'
+        'artist_popularity',
+        'artist_followers',
+        'track_duration_ms',
+        'album_total_tracks',
+        'track_number'
 
-]
+    ]
 
     input_data[scaled_columns] = scaler.transform(
         input_data[scaled_columns]
